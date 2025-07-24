@@ -32,7 +32,7 @@ export function RoleSelector({ selectedRole, onRoleSelect }: RoleSelectorProps) 
             styles.roleButtonText,
             selectedRole === 'seeker' && styles.roleButtonTextActive,
           ]}>
-            Home Seeker
+            Client
           </Text>
         </TouchableOpacity>
         
