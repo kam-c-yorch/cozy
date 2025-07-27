@@ -8,7 +8,7 @@ import {
   TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Search, Filter, MapPin, Sliders } from 'lucide-react-native';
+import { Search, Filter, MapPin, FileSliders as Sliders } from 'lucide-react-native';
 import { Colors } from '../../constants/Colors';
 import { Typography, getResponsiveFontSize } from '../../constants/Typography';
 import { Layout, Spacing } from '../../constants/Spacing';
