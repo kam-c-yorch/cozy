@@ -8,18 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { 
-  User, 
-  Settings, 
-  Heart, 
-  MessageSquare, 
-  HelpCircle, 
-  LogOut,
-  ChevronRight,
-  Bell,
-  Shield,
-  CreditCard
-} from 'lucide-react-native';
+import { User, Settings, Heart, MessageSquare, CircleHelp as HelpCircle, LogOut, ChevronRight, Bell, Shield, CreditCard } from 'lucide-react-native';
 import { Colors } from '../../constants/Colors';
 import { Typography, getResponsiveFontSize } from '../../constants/Typography';
 import { Layout, Spacing } from '../../constants/Spacing';
