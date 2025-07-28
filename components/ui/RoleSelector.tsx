@@ -6,8 +6,8 @@ import { Layout, Spacing } from '@/constants/Spacing';
 import { Chrome as Home, Key } from 'lucide-react-native';
 
 interface RoleSelectorProps {
-  selectedRole: 'seeker' | 'realtor' | null;
-  onRoleSelect: (role: 'seeker' | 'realtor') => void;
+  selectedRole: 'home_seeker' | 'realtor' | null;
+  onRoleSelect: (role: 'home_seeker' | 'realtor') => void;
 }
 
 export function RoleSelector({ selectedRole, onRoleSelect }: RoleSelectorProps) {
@@ -18,21 +18,21 @@ export function RoleSelector({ selectedRole, onRoleSelect }: RoleSelectorProps) 
         <TouchableOpacity
           style={[
             styles.roleButton,
-            selectedRole === 'seeker' && styles.roleButtonActive,
+            selectedRole === 'home_seeker' && styles.roleButtonActive,
           ]}
-          onPress={() => onRoleSelect('seeker')}
+          onPress={() => onRoleSelect('home_seeker')}
           activeOpacity={0.8}
         >
           <Home 
             size={24} 
-            color={selectedRole === 'seeker' ? Colors.white : Colors.black}
+            color={selectedRole === 'home_seeker' ? Colors.white : Colors.black}
             strokeWidth={2}
           />
           <Text style={[
             styles.roleButtonText,
-            selectedRole === 'seeker' && styles.roleButtonTextActive,
+            selectedRole === 'home_seeker' && styles.roleButtonTextActive,
           ]}>
-            Client
+            Home Seeker
           </Text>
         </TouchableOpacity>
         

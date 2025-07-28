@@ -23,7 +23,7 @@ interface AuthFormProps {
 
 export function AuthForm({ onAuthSuccess }: AuthFormProps) {
   const [isLogin, setIsLogin] = useState(true);
-  const [selectedRole, setSelectedRole] = useState<'realtor' | 'home_seeker'>('home_seeker');
+  const [selectedRole, setSelectedRole] = useState<'realtor' | 'home_seeker' | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -39,24 +39,20 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
         throw new Error('Please fill in all fields');
       }
 
+      if (!isLogin && !selectedRole) {
+        throw new Error('Please select your role');
+      }
+
       if (!isLogin && password !== confirmPassword) {
         throw new Error('Passwords do not match');
       }
 
       if (isLogin) {
         const result = await signIn(email, password);
-        if (result.success && result.role) {
-          onAuthSuccess(result.role);
-        } else {
-          throw new Error(result.error || 'Login failed');
-        }
+        onAuthSuccess(result.profile.role);
       } else {
-        const result = await signUp(email, password, selectedRole);
-        if (result.success) {
-          onAuthSuccess(selectedRole);
-        } else {
-          throw new Error(result.error || 'Sign up failed');
-        }
+        const result = await signUp(email, password, selectedRole!);
+        onAuthSuccess(selectedRole!);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
@@ -115,7 +111,7 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
             <Text style={styles.sectionTitle}>I am a</Text>
             <RoleSelector
               selectedRole={selectedRole}
-              onRoleChange={setSelectedRole}
+              onRoleSelect={setSelectedRole}
             />
           </View>
         )}

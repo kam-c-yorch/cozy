@@ -1,13 +1,28 @@
 import { Tabs } from 'expo-router';
-import { Chrome as Home, Search, User, Building2, Users, ChartBar as BarChart3 } from 'lucide-react-native';
+import { Home, Search, User, Building2, MessageSquare, BarChart3 } from 'lucide-react-native';
 import { Colors } from '../../constants/Colors';
 import { getResponsiveFontSize } from '../../constants/Typography';
+import { useEffect, useState } from 'react';
+import { getCurrentUserProfile } from '../../lib/auth';
 
-interface TabLayoutProps {
-  userRole: 'realtor' | 'home_seeker';
-}
+export default function TabLayout() {
+  const [userRole, setUserRole] = useState<'realtor' | 'home_seeker'>('home_seeker');
 
-export default function TabLayout({ userRole }: TabLayoutProps) {
+  useEffect(() => {
+    loadUserRole();
+  }, []);
+
+  const loadUserRole = async () => {
+    try {
+      const userProfile = await getCurrentUserProfile();
+      if (userProfile?.profile?.role) {
+        setUserRole(userProfile.profile.role);
+      }
+    } catch (error) {
+      console.error('Failed to load user role:', error);
+    }
+  };
+
   const isRealtor = userRole === 'realtor';
 
   return (
@@ -15,7 +30,7 @@ export default function TabLayout({ userRole }: TabLayoutProps) {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: Colors.accent,
-        tabBarInactiveTintColor: Colors.secondaryText,
+        tabBarInactiveTintColor: Colors.primaryText,
         tabBarStyle: {
           backgroundColor: Colors.white,
           borderTopWidth: 1,
@@ -53,11 +68,11 @@ export default function TabLayout({ userRole }: TabLayoutProps) {
             }}
           />
           <Tabs.Screen
-            name="analytics"
+            name="leads"
             options={{
-              title: 'Analytics',
+              title: 'Leads',
               tabBarIcon: ({ color, size }) => (
-                <BarChart3 size={size} color={color} strokeWidth={2} />
+                <MessageSquare size={size} color={color} strokeWidth={2} />
               ),
             }}
           />
