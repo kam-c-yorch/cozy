@@ -3,13 +3,9 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  Dimensions,
+  ActivityIndicator,
   Platform,
-}
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Colors } from '../constants/Colors';
