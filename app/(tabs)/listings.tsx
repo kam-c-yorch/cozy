@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Bell, Menu, Plus, MapPin, Bed, Bath, Square, MoreHorizontal } from 'lucide-react-native';
+import { Bell, Menu, Plus, MapPin, Bed, Bath, Square, MoveHorizontal as MoreHorizontal } from 'lucide-react-native';
 import { Colors } from '../../constants/Colors';
 import { Typography, getResponsiveFontSize } from '../../constants/Typography';
 import { Layout, Spacing } from '../../constants/Spacing';
