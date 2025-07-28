@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Home, Search, User, Building2, MessageSquare, BarChart3 } from 'lucide-react-native';
+import { Chrome as Home, Search, User, Building2, MessageSquare, ChartBar as BarChart3 } from 'lucide-react-native';
 import { Colors } from '../../constants/Colors';
 import { getResponsiveFontSize } from '../../constants/Typography';
 import { useEffect, useState } from 'react';
