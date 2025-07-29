@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -19,27 +19,39 @@ import { AuthForm } from '../components/auth/AuthForm';
 import { getCurrentUserProfile } from '../lib/auth';
 
 export default function LandingScreen() {
+  const isMounted = useRef(true);
   const [loading, setLoading] = useState(true);
   const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => {
+    isMounted.current = true;
     checkAuthStatus();
+    
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
   const checkAuthStatus = async () => {
     try {
       const userProfile = await getCurrentUserProfile();
-      if (userProfile) {
+      if (userProfile && isMounted.current) {
         // User is already authenticated, navigate to dashboard
         router.replace('/(tabs)');
       } else {
-        setShowAuth(true);
+        if (isMounted.current) {
+          setShowAuth(true);
+        }
       }
     } catch (error) {
       console.error('Auth check error:', error);
-      setShowAuth(true);
+      if (isMounted.current) {
+        setShowAuth(true);
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     }
   };
 

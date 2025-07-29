@@ -11,6 +11,10 @@ export const Colors = {
   secondaryText: '#333333',
   placeholderText: '#666666',
   
+  // Backward compatibility aliases
+  textPrimary: '#000000',
+  textSecondary: '#333333',
+  
   // Border colors
   border: '#E5E5E5',
   borderActive: '#000000',
