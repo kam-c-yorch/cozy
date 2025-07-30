@@ -15,6 +15,8 @@ import { Colors } from '../../constants/Colors';
 import { Typography, getResponsiveFontSize } from '../../constants/Typography';
 import { Layout, Spacing } from '../../constants/Spacing';
 import { Button } from '../../components/ui/Button';
+import { DrawerMenu } from '../../components/ui/DrawerMenu';
+import { getCurrentUserProfile } from '../../lib/auth';
 
 const { width: screenWidth } = Dimensions.get('window');
 const cardWidth = (screenWidth - (Layout.screenPadding * 2) - Spacing.md) / 2;
@@ -133,6 +135,21 @@ function ListingCard({ listing, onPress, onMore }: ListingCardProps) {
 export default function ListingsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [notificationCount, setNotificationCount] = useState(5);
+  const [showDrawer, setShowDrawer] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
+
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const profile = await getCurrentUserProfile();
+      setUserProfile(profile);
+    } catch (error) {
+      console.error('Failed to load user profile:', error);
+    }
+  };
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -163,8 +180,11 @@ export default function ListingsScreen() {
   };
 
   const handleMenu = () => {
-    console.log('Menu pressed');
-    // Open drawer or menu
+    setShowDrawer(true);
+  };
+
+  const handleSignOut = () => {
+    console.log('User signed out');
   };
 
   return (
@@ -222,6 +242,14 @@ export default function ListingsScreen() {
           ))}
         </View>
       </ScrollView>
+
+      {/* Drawer Menu */}
+      <DrawerMenu
+        visible={showDrawer}
+        onClose={() => setShowDrawer(false)}
+        userProfile={userProfile}
+        onSignOut={handleSignOut}
+      />
     </SafeAreaView>
   );
 }

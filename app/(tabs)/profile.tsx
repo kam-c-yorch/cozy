@@ -13,6 +13,7 @@ import { Colors } from '../../constants/Colors';
 import { Typography, getResponsiveFontSize } from '../../constants/Typography';
 import { Layout, Spacing } from '../../constants/Spacing';
 import { signOut, getCurrentUserProfile } from '../../lib/auth';
+import { router } from 'expo-router';
 
 interface ProfileMenuItemProps {
   icon: React.ReactNode;
@@ -45,7 +46,7 @@ interface ProfileScreenProps {
   onSignOut: () => void;
 }
 
-export default function ProfileScreen({ onSignOut }: ProfileScreenProps) {
+export default function ProfileScreen() {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -76,7 +77,7 @@ export default function ProfileScreen({ onSignOut }: ProfileScreenProps) {
           onPress: async () => {
             try {
               await signOut();
-              onSignOut();
+              router.replace('/');
             } catch (error) {
               console.error('Sign out error:', error);
               Alert.alert('Error', 'Failed to sign out. Please try again.');

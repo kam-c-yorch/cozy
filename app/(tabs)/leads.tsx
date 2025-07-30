@@ -12,6 +12,8 @@ import { Bell, Menu, MessageSquare, Phone, Mail, Clock, User } from 'lucide-reac
 import { Colors } from '../../constants/Colors';
 import { Typography, getResponsiveFontSize } from '../../constants/Typography';
 import { Layout, Spacing } from '../../constants/Spacing';
+import { DrawerMenu } from '../../components/ui/DrawerMenu';
+import { getCurrentUserProfile } from '../../lib/auth';
 
 // Mock leads data
 const mockLeads = [
@@ -133,6 +135,21 @@ function LeadCard({ lead, onPress, onCall, onEmail }: LeadCardProps) {
 export default function LeadsScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [notificationCount, setNotificationCount] = useState(3);
+  const [showDrawer, setShowDrawer] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
+
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const profile = await getCurrentUserProfile();
+      setUserProfile(profile);
+    } catch (error) {
+      console.error('Failed to load user profile:', error);
+    }
+  };
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -163,8 +180,11 @@ export default function LeadsScreen() {
   };
 
   const handleMenu = () => {
-    console.log('Menu pressed');
-    // Open drawer or menu
+    setShowDrawer(true);
+  };
+
+  const handleSignOut = () => {
+    console.log('User signed out');
   };
 
   const newLeadsCount = mockLeads.filter(lead => lead.status === 'new').length;
@@ -226,6 +246,14 @@ export default function LeadsScreen() {
           />
         ))}
       </ScrollView>
+
+      {/* Drawer Menu */}
+      <DrawerMenu
+        visible={showDrawer}
+        onClose={() => setShowDrawer(false)}
+        userProfile={userProfile}
+        onSignOut={handleSignOut}
+      />
     </SafeAreaView>
   );
 }

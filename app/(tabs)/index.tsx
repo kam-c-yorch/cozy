@@ -14,6 +14,9 @@ import { Bell, Menu, Heart, MapPin, Bed, Bath, Square } from 'lucide-react-nativ
 import { Colors } from '../../constants/Colors';
 import { Typography, getResponsiveFontSize } from '../../constants/Typography';
 import { Layout, Spacing } from '../../constants/Spacing';
+import { DrawerMenu } from '../../components/ui/DrawerMenu';
+import { getCurrentUserProfile } from '../../lib/auth';
+import { router } from 'expo-router';
 
 const { width: screenWidth } = Dimensions.get('window');
 const cardWidth = (screenWidth - (Layout.screenPadding * 2) - Spacing.md) / 2;
@@ -129,6 +132,21 @@ function PropertyCard({ property, onPress, onFavorite }: PropertyCardProps) {
 export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [notificationCount, setNotificationCount] = useState(3);
+  const [showDrawer, setShowDrawer] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
+
+  useEffect(() => {
+    loadUserProfile();
+  }, []);
+
+  const loadUserProfile = async () => {
+    try {
+      const profile = await getCurrentUserProfile();
+      setUserProfile(profile);
+    } catch (error) {
+      console.error('Failed to load user profile:', error);
+    }
+  };
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -139,8 +157,7 @@ export default function HomeScreen() {
   }, []);
 
   const handlePropertyPress = (propertyId: string) => {
-    console.log('Property pressed:', propertyId);
-    // Navigate to property details
+    router.push(`/property/${propertyId}`);
   };
 
   const handleFavorite = (propertyId: string) => {
@@ -154,8 +171,12 @@ export default function HomeScreen() {
   };
 
   const handleMenu = () => {
-    console.log('Menu pressed');
-    // Open drawer or menu
+    setShowDrawer(true);
+  };
+
+  const handleSignOut = () => {
+    // Handle sign out - this would typically navigate back to auth screen
+    console.log('User signed out');
   };
 
   return (
@@ -212,6 +233,14 @@ export default function HomeScreen() {
           ))}
         </View>
       </ScrollView>
+
+      {/* Drawer Menu */}
+      <DrawerMenu
+        visible={showDrawer}
+        onClose={() => setShowDrawer(false)}
+        userProfile={userProfile}
+        onSignOut={handleSignOut}
+      />
     </SafeAreaView>
   );
 }
