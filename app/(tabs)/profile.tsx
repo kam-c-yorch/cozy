@@ -96,7 +96,7 @@ export default function ProfileScreen() {
           icon: <User size={20} color={Colors.primaryText} strokeWidth={2} />,
           title: 'Edit Profile',
           subtitle: 'Update your personal information',
-          onPress: () => console.log('Edit Profile'),
+          onPress: () => router.push('/edit-profile'),
         },
         {
           icon: <Bell size={20} color={Colors.primaryText} strokeWidth={2} />,

@@ -35,6 +35,7 @@ import { Colors } from '../../constants/Colors';
 import { Typography, getResponsiveFontSize } from '../../constants/Typography';
 import { Layout, Spacing } from '../../constants/Spacing';
 import { Button } from '../../components/ui/Button';
+import { InquiryModal, InquiryData } from '../../components/ui/InquiryModal';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -152,6 +153,7 @@ export default function PropertyDetailsScreen() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showInquiryModal, setShowInquiryModal] = useState(false);
 
   useEffect(() => {
     loadPropertyDetails();
@@ -188,14 +190,18 @@ export default function PropertyDetailsScreen() {
     if (method === 'phone') {
       Alert.alert('Call Realtor', `Call ${property.realtor.name}?`);
     } else {
-      Alert.alert('Send Message', 'Message functionality would be implemented here');
+      setShowInquiryModal(true);
     }
   };
 
   const handleScheduleViewing = () => {
-    Alert.alert('Schedule Viewing', 'Viewing scheduler would be implemented here');
+    setShowInquiryModal(true);
   };
 
+  const handleInquirySubmit = (inquiry: InquiryData) => {
+    console.log('Inquiry submitted:', inquiry);
+    // In real app, this would send to API and create a lead
+  };
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -342,6 +348,16 @@ export default function PropertyDetailsScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Inquiry Modal */}
+      <InquiryModal
+        visible={showInquiryModal}
+        onClose={() => setShowInquiryModal(false)}
+        propertyTitle={property.title}
+        propertyPrice={property.price + property.period}
+        realtorName={property.realtor.name}
+        onSubmit={handleInquirySubmit}
+      />
 
       {/* Bottom Actions */}
       <View style={styles.bottomActions}>

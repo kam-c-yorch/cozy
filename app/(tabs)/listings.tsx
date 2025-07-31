@@ -170,8 +170,7 @@ export default function ListingsScreen() {
   };
 
   const handleAddProperty = () => {
-    console.log('Add new property');
-    // Navigate to add property screen
+    router.push('/add-property');
   };
 
   const handleNotifications = () => {
