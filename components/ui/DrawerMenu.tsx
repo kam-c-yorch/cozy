@@ -81,8 +81,7 @@ export function DrawerMenu({ visible, onClose, userProfile, onSignOut }: DrawerM
 
   const handleMessages = () => {
     onClose();
-    console.log('Navigate to Messages');
-    // Navigate to messages screen
+    router.push('/messages');
   };
 
   const handleNotificationSettings = () => {

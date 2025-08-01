@@ -175,8 +175,7 @@ export default function LeadsScreen() {
   };
 
   const handleNotifications = () => {
-    console.log('Notifications pressed');
-    // Navigate to notifications screen
+    router.push('/notifications');
   };
 
   const handleMenu = () => {

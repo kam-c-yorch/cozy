@@ -174,8 +174,7 @@ export default function ListingsScreen() {
   };
 
   const handleNotifications = () => {
-    console.log('Notifications pressed');
-    // Navigate to notifications screen
+    router.push('/notifications');
   };
 
   const handleMenu = () => {

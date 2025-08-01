@@ -588,13 +588,51 @@ const styles = StyleSheet.create({
   searchButtonContainer: {
     paddingHorizontal: Layout.screenPadding,
     marginBottom: Spacing.lg,
-    gap: Spacing.sm,
+  },
+  viewModeToggle: {
+    flexDirection: 'row',
+    backgroundColor: Colors.white,
+    borderRadius: Layout.borderRadius.md,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    marginBottom: Spacing.sm,
+    overflow: 'hidden',
+  },
+  viewModeButton: {
+    flex: 1,
+    paddingVertical: Spacing.sm,
+    alignItems: 'center',
+  },
+  viewModeButtonActive: {
+    backgroundColor: Colors.accent,
+  },
+  viewModeText: {
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.semiBold,
+    color: Colors.primaryText,
+  },
+  viewModeTextActive: {
+    color: Colors.white,
   },
   searchButton: {
     marginTop: 0,
+    marginBottom: Spacing.sm,
   },
   saveSearchButton: {
     marginTop: 0,
+  },
+  
+  // Map Section
+  mapSection: {
+    paddingHorizontal: Layout.screenPadding,
+    marginBottom: Spacing.lg,
+  },
+  mapResultsText: {
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.secondaryText,
+    textAlign: 'center',
+    marginTop: Spacing.sm,
   },
   
   // Quick Filters

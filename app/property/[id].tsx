@@ -36,6 +36,7 @@ import { Typography, getResponsiveFontSize } from '../../constants/Typography';
 import { Layout, Spacing } from '../../constants/Spacing';
 import { Button } from '../../components/ui/Button';
 import { InquiryModal, InquiryData } from '../../components/ui/InquiryModal';
+import { MapView, NearbyPlaces } from '../../components/ui/MapView';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -318,18 +319,13 @@ export default function PropertyDetailsScreen() {
 
           {/* Nearby Places */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Nearby Places</Text>
-            <View style={styles.nearbyPlaces}>
-              {property.nearbyPlaces.map((place: any, index: number) => (
-                <View key={index} style={styles.nearbyPlace}>
-                  <View style={styles.nearbyPlaceInfo}>
-                    <Text style={styles.nearbyPlaceName}>{place.name}</Text>
-                    <Text style={styles.nearbyPlaceType}>{place.type}</Text>
-                  </View>
-                  <Text style={styles.nearbyPlaceDistance}>{place.distance}</Text>
-                </View>
-              ))}
-            </View>
+            <Text style={styles.sectionTitle}>Location & Nearby</Text>
+            <MapView
+              address={property.fullAddress}
+              title={property.title}
+              height={200}
+            />
+            <NearbyPlaces places={property.nearbyPlaces} />
           </View>
 
           {/* Realtor Info */}

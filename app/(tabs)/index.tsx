@@ -17,6 +17,7 @@ import { Layout, Spacing } from '../../constants/Spacing';
 import { DrawerMenu } from '../../components/ui/DrawerMenu';
 import { getCurrentUserProfile } from '../../lib/auth';
 import { router } from 'expo-router';
+import { PropertyCardSkeleton } from '../../components/ui/LoadingSkeleton';
 
 const { width: screenWidth } = Dimensions.get('window');
 const cardWidth = (screenWidth - (Layout.screenPadding * 2) - Spacing.md) / 2;
@@ -131,12 +132,17 @@ function PropertyCard({ property, onPress, onFavorite }: PropertyCardProps) {
 
 export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [notificationCount, setNotificationCount] = useState(3);
   const [showDrawer, setShowDrawer] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
     loadUserProfile();
+    // Simulate initial loading
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
   }, []);
 
   const loadUserProfile = async () => {
@@ -166,8 +172,7 @@ export default function HomeScreen() {
   };
 
   const handleNotifications = () => {
-    console.log('Notifications pressed');
-    // Navigate to notifications screen
+    router.push('/notifications');
   };
 
   const handleMenu = () => {
@@ -223,14 +228,21 @@ export default function HomeScreen() {
 
         {/* Properties Grid */}
         <View style={styles.propertiesGrid}>
-          {mockProperties.map((property) => (
-            <PropertyCard
-              key={property.id}
-              property={property}
-              onPress={() => handlePropertyPress(property.id)}
-              onFavorite={() => handleFavorite(property.id)}
-            />
-          ))}
+          {loading ? (
+            // Show skeleton loading cards
+            Array.from({ length: 4 }).map((_, index) => (
+              <PropertyCardSkeleton key={index} style={{ width: cardWidth, marginBottom: Spacing.md }} />
+            ))
+          ) : (
+            mockProperties.map((property) => (
+              <PropertyCard
+                key={property.id}
+                property={property}
+                onPress={() => handlePropertyPress(property.id)}
+                onFavorite={() => handleFavorite(property.id)}
+              />
+            ))
+          )}
         </View>
       </ScrollView>
 
