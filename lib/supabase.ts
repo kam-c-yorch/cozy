@@ -1,5 +1,34 @@
 import { createClient } from '@supabase/supabase-js';
 
+// Safe storage wrapper that works in all environments
+const safeStorage = {
+  getItem: (key: string): string | null => {
+    try {
+      return typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null;
+    } catch {
+      return null;
+    }
+  },
+  setItem: (key: string, value: string): void => {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(key, value);
+      }
+    } catch {
+      // Silently fail if localStorage is not available
+    }
+  },
+  removeItem: (key: string): void => {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem(key);
+      }
+    } catch {
+      // Silently fail if localStorage is not available
+    }
+  }
+};
+
 // Mock Supabase configuration for development
 const supabaseUrl = 'https://mock.supabase.co';
 const supabaseAnonKey = 'mock-key';
@@ -19,7 +48,7 @@ const mockSupabaseClient = {
       };
       
       // Store in localStorage for persistence
-      localStorage.setItem('mock_user', JSON.stringify(mockUser));
+      safeStorage.setItem('mock_user', JSON.stringify(mockUser));
       
       return {
         data: { user: mockUser },
@@ -32,7 +61,7 @@ const mockSupabaseClient = {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Check if user exists in localStorage
-      const storedUser = localStorage.getItem('mock_user');
+      const storedUser = safeStorage.getItem('mock_user');
       if (storedUser) {
         const user = JSON.parse(storedUser);
         if (user.email === email) {
@@ -50,7 +79,7 @@ const mockSupabaseClient = {
         user_metadata: { role: 'home_seeker' }
       };
       
-      localStorage.setItem('mock_user', JSON.stringify(mockUser));
+      safeStorage.setItem('mock_user', JSON.stringify(mockUser));
       
       return {
         data: { user: mockUser },
@@ -59,12 +88,12 @@ const mockSupabaseClient = {
     },
     
     signOut: async () => {
-      localStorage.removeItem('mock_user');
+      safeStorage.removeItem('mock_user');
       return { error: null };
     },
     
     getUser: async () => {
-      const storedUser = localStorage.getItem('mock_user');
+      const storedUser = safeStorage.getItem('mock_user');
       if (storedUser) {
         return {
           data: { user: JSON.parse(storedUser) },
@@ -79,7 +108,7 @@ const mockSupabaseClient = {
     
     onAuthStateChange: (callback: any) => {
       // Mock auth state change listener
-      const storedUser = localStorage.getItem('mock_user');
+      const storedUser = safeStorage.getItem('mock_user');
       if (storedUser) {
         setTimeout(() => {
           callback('SIGNED_IN', { user: JSON.parse(storedUser) });
