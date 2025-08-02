@@ -17,6 +17,9 @@ import { Layout, Spacing } from '../../constants/Spacing';
 import { Button } from '../../components/ui/Button';
 import { DrawerMenu } from '../../components/ui/DrawerMenu';
 import { getCurrentUserProfile } from '../../lib/auth';
+import { PropertyStatusManager } from '../../components/ui/PropertyStatusManager';
+import { router } from 'expo-router';
+import React, { useEffect } from 'react';
 
 const { width: screenWidth } = Dimensions.get('window');
 const cardWidth = (screenWidth - (Layout.screenPadding * 2) - Spacing.md) / 2;
@@ -137,6 +140,9 @@ export default function ListingsScreen() {
   const [notificationCount, setNotificationCount] = useState(5);
   const [showDrawer, setShowDrawer] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [showStatusManager, setShowStatusManager] = useState(false);
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string>('');
+  const [listings, setListings] = useState(mockListings);
 
   useEffect(() => {
     loadUserProfile();
@@ -165,8 +171,30 @@ export default function ListingsScreen() {
   };
 
   const handleMore = (listingId: string) => {
-    console.log('More options for listing:', listingId);
-    // Show action sheet with edit/delete/duplicate options
+    setSelectedPropertyId(listingId);
+    setShowStatusManager(true);
+  };
+
+  const handleStatusChange = (newStatus: string, propertyId: string) => {
+    setListings(prev => prev.map(listing => 
+      listing.id === propertyId 
+        ? { 
+            ...listing, 
+            status: newStatus,
+            statusColor: getStatusColor(newStatus)
+          }
+        : listing
+    ));
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Active': return Colors.success;
+      case 'Pending': return Colors.warning;
+      case 'Rented': return Colors.accent;
+      case 'Inactive': return Colors.error;
+      default: return Colors.secondaryText;
+    }
   };
 
   const handleAddProperty = () => {
@@ -230,7 +258,7 @@ export default function ListingsScreen() {
       >
         {/* Listings Grid */}
         <View style={styles.listingsGrid}>
-          {mockListings.map((listing) => (
+          {listings.map((listing) => (
             <ListingCard
               key={listing.id}
               listing={listing}
@@ -247,6 +275,15 @@ export default function ListingsScreen() {
         onClose={() => setShowDrawer(false)}
         userProfile={userProfile}
         onSignOut={handleSignOut}
+      />
+
+      {/* Status Manager Modal */}
+      <PropertyStatusManager
+        visible={showStatusManager}
+        onClose={() => setShowStatusManager(false)}
+        propertyId={selectedPropertyId}
+        currentStatus={listings.find(l => l.id === selectedPropertyId)?.status as any || 'Active'}
+        onStatusChange={handleStatusChange}
       />
     </SafeAreaView>
   );

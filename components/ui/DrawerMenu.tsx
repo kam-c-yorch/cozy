@@ -21,7 +21,8 @@ import {
   Info,
   LogOut,
   ChevronRight,
-  User
+  User,
+  CreditCard
 } from 'lucide-react-native';
 import { Colors } from '../../constants/Colors';
 import { Typography, getResponsiveFontSize } from '../../constants/Typography';
@@ -92,8 +93,7 @@ export function DrawerMenu({ visible, onClose, userProfile, onSignOut }: DrawerM
 
   const handleSettings = () => {
     onClose();
-    console.log('Navigate to Settings');
-    // Navigate to settings screen
+    router.push('/settings');
   };
 
   const handleHelp = () => {
@@ -178,6 +178,15 @@ export function DrawerMenu({ visible, onClose, userProfile, onSignOut }: DrawerM
           title: 'Settings',
           subtitle: 'App preferences and configuration',
           onPress: handleSettings,
+        },
+        {
+          icon: <CreditCard size={20} color={Colors.primaryText} strokeWidth={2} />,
+          title: 'Subscription',
+          subtitle: 'Manage your subscription plan',
+          onPress: () => {
+            onClose();
+            router.push('/subscription');
+          },
         },
         {
           icon: <HelpCircle size={20} color={Colors.primaryText} strokeWidth={2} />,
