@@ -11,7 +11,7 @@ import {
   FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Search, Filter, MapPin, Map, Grid3X3, List } from 'lucide-react-native';
+import { Search, Filter, MapPin, Map, Grid3x3 as Grid3X3, List } from 'lucide-react-native';
 import { Colors } from '../../constants/Colors';
 import { Typography } from '../../constants/Typography';
 import { Spacing } from '../../constants/Spacing';
