@@ -165,7 +165,7 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
             <Button
               title="Forgot Password?"
               onPress={handleForgotPassword}
-              variant="text"
+              variant="outline"
               style={styles.forgotButton}
             />
           )}
@@ -181,7 +181,7 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
                 setIsLogin(!isLogin);
                 setError('');
               }}
-              variant="text"
+              variant="outline"
               style={styles.toggleButton}
             />
           </View>
@@ -207,9 +207,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   sectionTitle: {
-    fontSize: Typography.sizes.body,
-    fontWeight: Typography.weights.medium,
-    color: Colors.textSecondary,
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.semiBold,
+    color: Colors.secondaryText,
     marginBottom: Spacing.md,
     textAlign: 'center',
   },
@@ -217,9 +217,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   formTitle: {
-    fontSize: Typography.sizes.h2,
-    fontWeight: Typography.weights.bold,
-    color: Colors.textPrimary,
+    fontSize: getResponsiveFontSize('title'),
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.primaryText,
     textAlign: 'center',
     marginBottom: Spacing.xl,
   },
@@ -242,14 +242,16 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   toggleText: {
-    fontSize: Typography.sizes.small,
-    color: Colors.textSecondary,
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.secondaryText,
   },
   toggleButton: {
     paddingHorizontal: 0,
   },
   errorText: {
-    fontSize: Typography.sizes.small,
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.regular,
     color: Colors.error,
     textAlign: 'center',
     marginBottom: Spacing.md,

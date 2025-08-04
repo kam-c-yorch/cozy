@@ -13,11 +13,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Search, Filter, MapPin, Map, Grid3x3 as Grid3X3, List } from 'lucide-react-native';
 import { Colors } from '../../constants/Colors';
-import { Typography } from '../../constants/Typography';
+import { Typography, getResponsiveFontSize } from '../../constants/Typography';
 import { Spacing } from '../../constants/Spacing';
-import { Layout } from '../../constants/Layout';
+import { Layout } from '../../constants/Spacing';
 import { MapView } from '../../components/ui/MapView';
-import { LoadingSkeleton } from '../../components/ui/LoadingSkeleton';
+import { LoadingSkeleton, PropertyCardSkeleton } from '../../components/ui/LoadingSkeleton';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -367,20 +367,20 @@ export default function SearchScreen() {
       {/* Search Header */}
       <View style={styles.searchHeader}>
         <View style={styles.searchContainer}>
-          <Search size={20} color={Colors.text.secondary} style={styles.searchIcon} />
+          <Search size={20} color={Colors.secondaryText} strokeWidth={2} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search properties, locations..."
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholderTextColor={Colors.text.secondary}
+            placeholderTextColor={Colors.placeholderText}
           />
         </View>
         <TouchableOpacity
           style={styles.filterButton}
           onPress={() => setShowFilters(true)}
         >
-          <Filter size={20} color={Colors.primary.main} />
+          <Filter size={20} color={Colors.accent} strokeWidth={2} />
         </TouchableOpacity>
       </View>
 
@@ -391,19 +391,19 @@ export default function SearchScreen() {
             style={[styles.viewModeButton, viewMode === 'grid' && styles.viewModeButtonActive]}
             onPress={() => setViewMode('grid')}
           >
-            <Grid3X3 size={18} color={viewMode === 'grid' ? Colors.primary.main : Colors.text.secondary} />
+            <Grid3X3 size={18} color={viewMode === 'grid' ? Colors.accent : Colors.secondaryText} strokeWidth={2} />
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.viewModeButton, viewMode === 'list' && styles.viewModeButtonActive]}
             onPress={() => setViewMode('list')}
           >
-            <List size={18} color={viewMode === 'list' ? Colors.primary.main : Colors.text.secondary} />
+            <List size={18} color={viewMode === 'list' ? Colors.accent : Colors.secondaryText} strokeWidth={2} />
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.viewModeButton, viewMode === 'map' && styles.viewModeButtonActive]}
             onPress={() => setViewMode('map')}
           >
-            <Map size={18} color={viewMode === 'map' ? Colors.primary.main : Colors.text.secondary} />
+            <Map size={18} color={viewMode === 'map' ? Colors.accent : Colors.secondaryText} strokeWidth={2} />
           </TouchableOpacity>
         </View>
         <Text style={styles.resultsCount}>{properties.length} properties found</Text>
@@ -439,15 +439,15 @@ export default function SearchScreen() {
       {/* Content */}
       {loading ? (
         <ScrollView style={styles.content}>
-          <LoadingSkeleton type="propertyCard" />
-          <LoadingSkeleton type="propertyCard" />
-          <LoadingSkeleton type="propertyCard" />
+          <PropertyCardSkeleton />
+          <PropertyCardSkeleton />
+          <PropertyCardSkeleton />
         </ScrollView>
       ) : viewMode === 'map' ? (
         <View style={styles.mapContainer}>
           <MapView
             address="Lagos, Nigeria"
-            showControls={true}
+            showControls
             style={styles.map}
           />
         </View>
@@ -471,7 +471,7 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background.primary,
+    backgroundColor: Colors.background,
   },
   searchHeader: {
     flexDirection: 'row',
@@ -484,26 +484,29 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.background.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 12,
     paddingHorizontal: Spacing.md,
     height: 48,
-  },
-  searchIcon: {
-    marginRight: Spacing.sm,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   searchInput: {
     flex: 1,
-    fontSize: Typography.body.fontSize,
-    color: Colors.text.primary,
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.primaryText,
+    marginLeft: Spacing.sm,
   },
   filterButton: {
     width: 48,
     height: 48,
-    backgroundColor: Colors.background.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   viewModeContainer: {
     flexDirection: 'row',
@@ -514,9 +517,11 @@ const styles = StyleSheet.create({
   },
   viewModeToggle: {
     flexDirection: 'row',
-    backgroundColor: Colors.background.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 8,
     padding: 2,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   viewModeButton: {
     paddingHorizontal: Spacing.sm,
@@ -524,11 +529,12 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   viewModeButtonActive: {
-    backgroundColor: Colors.background.primary,
+    backgroundColor: Colors.accent,
   },
   resultsCount: {
-    fontSize: Typography.caption.fontSize,
-    color: Colors.text.secondary,
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.secondaryText,
   },
   activeFilters: {
     paddingHorizontal: Layout.screenPadding,
@@ -537,21 +543,22 @@ const styles = StyleSheet.create({
   activeFilter: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.primary.light,
+    backgroundColor: Colors.accent,
     borderRadius: 16,
     paddingHorizontal: Spacing.sm,
     paddingVertical: Spacing.xs,
     marginRight: Spacing.xs,
   },
   activeFilterText: {
-    fontSize: Typography.caption.fontSize,
-    color: Colors.primary.main,
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.white,
     marginRight: Spacing.xs,
   },
   removeFilter: {
     fontSize: 16,
-    color: Colors.primary.main,
-    fontWeight: 'bold',
+    color: Colors.white,
+    fontFamily: Typography.fontFamily.bold,
   },
   content: {
     flex: 1,
@@ -570,15 +577,23 @@ const styles = StyleSheet.create({
   },
   propertyCard: {
     width: (screenWidth - (Layout.screenPadding * 2) - Spacing.md) / 2,
-    backgroundColor: Colors.background.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 12,
     marginBottom: Spacing.md,
     marginRight: Spacing.md,
     overflow: 'hidden',
+    shadowColor: Colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   propertyImage: {
     height: 120,
-    backgroundColor: Colors.background.tertiary,
+    backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
@@ -590,53 +605,63 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: Spacing.xs,
     right: Spacing.xs,
-    backgroundColor: Colors.accent.main,
+    backgroundColor: Colors.accent,
     borderRadius: 4,
     paddingHorizontal: Spacing.xs,
     paddingVertical: 2,
   },
   featuredText: {
     fontSize: 10,
-    color: Colors.background.primary,
-    fontWeight: 'bold',
+    color: Colors.white,
+    fontFamily: Typography.fontFamily.bold,
   },
   propertyInfo: {
     padding: Spacing.sm,
   },
   propertyTitle: {
-    fontSize: Typography.body.fontSize,
-    fontWeight: '600',
-    color: Colors.text.primary,
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.semiBold,
+    color: Colors.primaryText,
     marginBottom: 2,
   },
   propertyPrice: {
-    fontSize: Typography.h3.fontSize,
-    fontWeight: 'bold',
-    color: Colors.primary.main,
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.accent,
     marginBottom: Spacing.xs,
   },
   propertyDetails: {
     gap: 2,
   },
   propertyLocation: {
-    fontSize: Typography.caption.fontSize,
-    color: Colors.text.secondary,
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.secondaryText,
   },
   propertySpecs: {
-    fontSize: Typography.caption.fontSize,
-    color: Colors.text.secondary,
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.secondaryText,
   },
   listItem: {
     flexDirection: 'row',
-    backgroundColor: Colors.background.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 12,
     marginBottom: Spacing.md,
     overflow: 'hidden',
+    shadowColor: Colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   listImage: {
     width: 100,
     height: 100,
-    backgroundColor: Colors.background.tertiary,
+    backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -646,26 +671,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   listTitle: {
-    fontSize: Typography.body.fontSize,
-    fontWeight: '600',
-    color: Colors.text.primary,
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.semiBold,
+    color: Colors.primaryText,
   },
   listPrice: {
-    fontSize: Typography.h3.fontSize,
-    fontWeight: 'bold',
-    color: Colors.primary.main,
+    fontSize: getResponsiveFontSize('subtitle'),
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.accent,
   },
   listLocation: {
-    fontSize: Typography.caption.fontSize,
-    color: Colors.text.secondary,
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.secondaryText,
   },
   listSpecs: {
-    fontSize: Typography.caption.fontSize,
-    color: Colors.text.secondary,
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.secondaryText,
   },
   filterModal: {
     flex: 1,
-    backgroundColor: Colors.background.primary,
+    backgroundColor: Colors.background,
   },
   filterHeader: {
     flexDirection: 'row',
@@ -674,21 +701,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: Layout.screenPadding,
     paddingVertical: Spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border.light,
+    borderBottomColor: Colors.border,
+    backgroundColor: Colors.white,
   },
   filterCancel: {
-    fontSize: Typography.body.fontSize,
-    color: Colors.text.secondary,
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.secondaryText,
   },
   filterTitle: {
-    fontSize: Typography.h2.fontSize,
-    fontWeight: 'bold',
-    color: Colors.text.primary,
+    fontSize: getResponsiveFontSize('title'),
+    fontFamily: Typography.fontFamily.bold,
+    color: Colors.primaryText,
   },
   filterApply: {
-    fontSize: Typography.body.fontSize,
-    color: Colors.primary.main,
-    fontWeight: '600',
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.semiBold,
+    color: Colors.accent,
   },
   filterContent: {
     flex: 1,
@@ -698,9 +727,9 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.lg,
   },
   filterSectionTitle: {
-    fontSize: Typography.h3.fontSize,
-    fontWeight: '600',
-    color: Colors.text.primary,
+    fontSize: getResponsiveFontSize('subtitle'),
+    fontFamily: Typography.fontFamily.semiBold,
+    color: Colors.primaryText,
     marginBottom: Spacing.md,
   },
   filterOptions: {
@@ -711,22 +740,23 @@ const styles = StyleSheet.create({
   filterOption: {
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    backgroundColor: Colors.background.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: Colors.border.light,
+    borderColor: Colors.border,
   },
   filterOptionActive: {
-    backgroundColor: Colors.primary.light,
-    borderColor: Colors.primary.main,
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
   },
   filterOptionText: {
-    fontSize: Typography.body.fontSize,
-    color: Colors.text.primary,
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.primaryText,
   },
   filterOptionTextActive: {
-    color: Colors.primary.main,
-    fontWeight: '600',
+    color: Colors.white,
+    fontFamily: Typography.fontFamily.semiBold,
   },
   priceInputs: {
     flexDirection: 'row',
@@ -736,19 +766,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   priceLabel: {
-    fontSize: Typography.caption.fontSize,
-    color: Colors.text.secondary,
+    fontSize: getResponsiveFontSize('small'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.secondaryText,
     marginBottom: Spacing.xs,
   },
   priceField: {
-    backgroundColor: Colors.background.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 8,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    fontSize: Typography.body.fontSize,
-    color: Colors.text.primary,
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.primaryText,
     borderWidth: 1,
-    borderColor: Colors.border.light,
+    borderColor: Colors.border,
   },
   numberSelector: {
     flexDirection: 'row',
@@ -757,24 +789,25 @@ const styles = StyleSheet.create({
   numberOption: {
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    backgroundColor: Colors.background.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: Colors.border.light,
+    borderColor: Colors.border,
     minWidth: 50,
     alignItems: 'center',
   },
   numberOptionActive: {
-    backgroundColor: Colors.primary.light,
-    borderColor: Colors.primary.main,
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
   },
   numberOptionText: {
-    fontSize: Typography.body.fontSize,
-    color: Colors.text.primary,
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.primaryText,
   },
   numberOptionTextActive: {
-    color: Colors.primary.main,
-    fontWeight: '600',
+    color: Colors.white,
+    fontFamily: Typography.fontFamily.semiBold,
   },
   amenitiesGrid: {
     flexDirection: 'row',
@@ -784,22 +817,23 @@ const styles = StyleSheet.create({
   amenityOption: {
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    backgroundColor: Colors.background.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: Colors.border.light,
+    borderColor: Colors.border,
   },
   amenityOptionActive: {
-    backgroundColor: Colors.primary.light,
-    borderColor: Colors.primary.main,
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
   },
   amenityOptionText: {
-    fontSize: Typography.body.fontSize,
-    color: Colors.text.primary,
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.primaryText,
   },
   amenityOptionTextActive: {
-    color: Colors.primary.main,
-    fontWeight: '600',
+    color: Colors.white,
+    fontFamily: Typography.fontFamily.semiBold,
   },
   sortOptions: {
     gap: Spacing.sm,
@@ -807,21 +841,22 @@ const styles = StyleSheet.create({
   sortOption: {
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
-    backgroundColor: Colors.background.secondary,
+    backgroundColor: Colors.white,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: Colors.border.light,
+    borderColor: Colors.border,
   },
   sortOptionActive: {
-    backgroundColor: Colors.primary.light,
-    borderColor: Colors.primary.main,
+    backgroundColor: Colors.accent,
+    borderColor: Colors.accent,
   },
   sortOptionText: {
-    fontSize: Typography.body.fontSize,
-    color: Colors.text.primary,
+    fontSize: getResponsiveFontSize('body'),
+    fontFamily: Typography.fontFamily.regular,
+    color: Colors.primaryText,
   },
   sortOptionTextActive: {
-    color: Colors.primary.main,
-    fontWeight: '600',
+    color: Colors.white,
+    fontFamily: Typography.fontFamily.semiBold,
   },
 });
