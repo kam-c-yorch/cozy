@@ -19,7 +19,6 @@ import { DrawerMenu } from '../../components/ui/DrawerMenu';
 import { getCurrentUserProfile } from '../../lib/auth';
 import { PropertyStatusManager } from '../../components/ui/PropertyStatusManager';
 import { router } from 'expo-router';
-import React, { useEffect } from 'react';
 
 const { width: screenWidth } = Dimensions.get('window');
 const cardWidth = (screenWidth - (Layout.screenPadding * 2) - Spacing.md) / 2;
